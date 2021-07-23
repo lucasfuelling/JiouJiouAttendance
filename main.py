@@ -8,8 +8,8 @@ import requests
 from os import system
 import mariadb
 import sys
-#from mfrc522 import SimpleMFRC522
-#import RPi.GPIO as GPIO
+from mfrc522 import SimpleMFRC522
+import RPi.GPIO as GPIO
 
 thread_running = True
 token = "hSoXRRGQiiKDkmvptJTk5rph7UIv50ZqB2vb4IJ0MgK"
@@ -173,9 +173,9 @@ def reader():
     while True:
         global thread_running
         conn = connect_to_mariadb()
-        #reader = SimpleMFRC522()
-        #mychip, text = reader.read()
-        mychip = input()
+        reader = SimpleMFRC522()
+        mychip, text = reader.read()
+        #mychip = input()
         event.set()
         clear()
         if user_exists(conn, mychip) or mychip == "99":
