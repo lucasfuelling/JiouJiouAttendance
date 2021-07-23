@@ -8,13 +8,15 @@ import requests
 from os import system
 import mariadb
 import sys
+#from mfrc522 import SimpleMFRC522
+#import RPi.GPIO as GPIO
 
 thread_running = True
 token = "hSoXRRGQiiKDkmvptJTk5rph7UIv50ZqB2vb4IJ0MgK"
 
 
 def clear():
-    system('cls')
+    system('\033c')
 
 
 def line_notify_message(token, msg):
@@ -124,12 +126,11 @@ def attendance_come(conn, mychip):
         conn.commit()
         print(name + " " + come_time + " " + "上班")
         today_8am = datetime.now().replace(hour=8, minute=0)
-        today_830am = datetime.now().replace(hour=8, minute=30)
         if today_8am < datetime.now():
             msg = name + " " + come_time + "上班"
             line_notify_message(token, msg)
     else:
-        print("已打卡了")
+        print("已打卡了 ")
 
 
 def attendance_go(conn, mychip):
@@ -172,6 +173,8 @@ def reader():
     while True:
         global thread_running
         conn = connect_to_mariadb()
+        #reader = SimpleMFRC522()
+        #mychip, text = reader.read()
         mychip = input()
         event.set()
         clear()
@@ -185,12 +188,12 @@ def reader():
             else:
                 add_user(conn)
         else:
-            print("沒有找到用戶")
+            print("沒有找到用戶" + mychip)
         time.sleep(1.5)
         event.clear()
 
 
-# shows time and notifies LINE messenger when employee has forgotten to clock out.
+# shows time
 def background_thread():
     while True:
         while not event.isSet():
