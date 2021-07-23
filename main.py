@@ -16,7 +16,7 @@ token = "hSoXRRGQiiKDkmvptJTk5rph7UIv50ZqB2vb4IJ0MgK"
 
 
 def clear():
-    system('\033c')
+    system("\033c")
 
 
 def line_notify_message(token, msg):
