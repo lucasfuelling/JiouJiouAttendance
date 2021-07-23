@@ -172,6 +172,7 @@ def export_data(conn):
 def reader():
     while True:
         global thread_running
+        GPIO.setwarnings(False)
         conn = connect_to_mariadb()
         reader = SimpleMFRC522()
         mychip, text = reader.read()
