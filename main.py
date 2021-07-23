@@ -188,7 +188,7 @@ def reader():
             else:
                 add_user(conn)
         else:
-            print("沒有找到用戶" + mychip)
+            print("沒有找到用戶" + str(mychip))
         time.sleep(1.5)
         event.clear()
 
