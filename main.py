@@ -5,7 +5,6 @@ import time
 import csv
 from threading import *
 import requests
-from os import system
 import mariadb
 import sys
 from mfrc522 import SimpleMFRC522
@@ -16,7 +15,7 @@ token = "hSoXRRGQiiKDkmvptJTk5rph7UIv50ZqB2vb4IJ0MgK"
 
 
 def clear():
-    system("\033c")
+    print("\033c")
 
 
 def line_notify_message(token, msg):
