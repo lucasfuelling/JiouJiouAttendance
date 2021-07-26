@@ -179,15 +179,16 @@ def reader():
         #mychip = input()
         event.set()
         clear()
-        if user_exists(conn, mychip) or mychip == "1008166288776":
-            if mychip != "1008166288776":
+        if user_exists(conn, mychip) or mychip == 1008166288776:
+            if mychip != 1008166288776:
                 if user_clocked(conn, mychip):
                     attendance_go(conn, mychip)
                     export_data(conn)
                 else:
                     attendance_come(conn, mychip)
             else:
-                add_user(conn)
+                shutdown()
+                #add_user(conn)
         else:
             print("沒有找到用戶" + str(mychip))
         time.sleep(1.5)
