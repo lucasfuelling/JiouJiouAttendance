@@ -9,6 +9,7 @@ import mariadb
 import sys
 from mfrc522 import SimpleMFRC522
 import RPi.GPIO as GPIO
+import os
 
 thread_running = True
 token = "hSoXRRGQiiKDkmvptJTk5rph7UIv50ZqB2vb4IJ0MgK"
@@ -178,8 +179,8 @@ def reader():
         #mychip = input()
         event.set()
         clear()
-        if user_exists(conn, mychip) or mychip == "99":
-            if mychip != "99":
+        if user_exists(conn, mychip) or mychip == "1008166288776":
+            if mychip != "1008166288776":
                 if user_clocked(conn, mychip):
                     attendance_go(conn, mychip)
                     export_data(conn)
@@ -192,6 +193,9 @@ def reader():
         time.sleep(1.5)
         event.clear()
 
+
+def shutdown():
+    os.system("sudo shutdown -h now")
 
 # shows time
 def background_thread():
