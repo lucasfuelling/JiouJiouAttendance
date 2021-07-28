@@ -55,7 +55,7 @@ def no_come():
     global token
     conn = connect_to_mariadb()
     cur = conn.cursor()
-    sql = "select name from users where name not in (select username from attendance where clockday = curdate())"
+    sql = "select name from users where name not in (select username from attendance where clockday = curdate()) and name <>''"
     cur.execute(sql)
     rows = cur.fetchall()
     message = '\n'
