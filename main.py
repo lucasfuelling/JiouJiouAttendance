@@ -173,10 +173,10 @@ def reader():
     while True:
         global thread_running
         GPIO.setwarnings(False)
-        conn = connect_to_mariadb()
         reader = SimpleMFRC522()
         mychip, text = reader.read()
         #mychip = input()
+        conn = connect_to_mariadb()
         event.set()
         clear()
         if user_exists(conn, mychip) or mychip == 1008166288776:
