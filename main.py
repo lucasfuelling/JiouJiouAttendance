@@ -7,8 +7,6 @@ from threading import *
 import requests
 import mariadb
 import sys
-from mfrc522 import SimpleMFRC522
-import RPi.GPIO as GPIO
 import os
 
 thread_running = True
@@ -172,15 +170,12 @@ def export_data(conn):
 def reader():
     while True:
         global thread_running
-        GPIO.setwarnings(False)
-        reader = SimpleMFRC522()
-        mychip, text = reader.read()
-        #mychip = input()
+        mychip = input()
         conn = connect_to_mariadb()
         event.set()
         clear()
-        if user_exists(conn, mychip) or mychip == 1008166288776:
-            if mychip != 1008166288776:
+        if user_exists(conn, mychip) or mychip == "7454275":
+            if mychip != "7454275":
                 if user_clocked(conn, mychip):
                     attendance_go(conn, mychip)
                     export_data(conn)
