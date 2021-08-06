@@ -174,8 +174,8 @@ def reader():
         conn = connect_to_mariadb()
         event.set()
         clear()
-        if user_exists(conn, mychip) or mychip == "7454275":
-            if mychip != "7454275":
+        if user_exists(conn, mychip) or mychip == "0002245328":
+            if mychip != "0002245328":
                 if user_clocked(conn, mychip):
                     attendance_go(conn, mychip)
                     export_data(conn)
