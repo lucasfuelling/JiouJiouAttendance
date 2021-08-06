@@ -42,22 +42,6 @@ def connect_to_mariadb():
     return conn
 
 
-def insert_user(conn, namechip):
-    cur = conn.cursor()
-    sql = ''' INSERT INTO users(Name,ChipNo) VALUES(?,?)'''
-    cur.execute(sql, namechip)
-    conn.commit()
-    print("輸入ok")
-
-
-def update_user(conn, namechip):
-    cur = conn.cursor()
-    sql = '''UPDATE users SET name =? WHERE chipno=?'''
-    cur.execute(sql, namechip)
-    conn.commit()
-    print("輸入ok")
-
-
 def user_exists(conn, mychip):
     cur = conn.cursor()
     sql = "SELECT userid FROM users WHERE chipno=?"
@@ -93,18 +77,6 @@ def short_clock_in_time(conn, mychip):
         return bool(True)
     else:
         return bool(False)
-
-
-def add_user(conn):
-    mychip = input("新員工 \n請打卡:")
-    if user_exists(conn, mychip):
-        yesno = input("用戶存在\n覆蓋名字?[1=是/0=否]:")
-        if yesno == "1":
-            new_name = input("輸入新名字:")
-            update_user(conn, (new_name, mychip))
-    else:
-        name = input("輸入名字:")
-        insert_user(conn, (name, mychip))
 
 
 def attendance_come(conn, mychip):
@@ -156,11 +128,8 @@ def export_data(conn):
     str_month = str(month).zfill(2)
     cur = conn.cursor()
     csv_writer = csv.writer(open("打卡-" + str_year + "-" + str_month + ".csv", "w", encoding='utf-8-sig', newline=''))
-    #sql = "SELECT username, day, clockin, clockout FROM attendance WHERE strftime('%m', day) = ? ORDER BY userid ASC, " \
-    #      "day ASC "
     sql = "SELECT username, clockday, DATE_FORMAT(clockin,'%k:%i') as 'clockin', DATE_FORMAT(clockout,'%k:%i') as " \
-          "'clockout' FROM attendance where month(clockday) = month(curdate()) ORDER BY userid ASC "
-    #par = (str_month,)
+          "'clockout' FROM attendance where month(clockday) = month(curdate()) ORDER BY userid ASC, clockday ASC "
     cur.execute(sql)
     rows = cur.fetchall()
     csv_writer.writerow(["Name", "Date", "Come", "Go"])
@@ -192,6 +161,7 @@ def reader():
 
 def shutdown():
     os.system("sudo shutdown -h now")
+
 
 # shows time
 def background_thread():
