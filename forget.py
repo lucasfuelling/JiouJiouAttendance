@@ -5,7 +5,7 @@ import requests
 import mariadb
 import sys
 
-token = "hSoXRRGQiiKDkmvptJTk5rph7UIv50ZqB2vb4IJ0MgK"
+token = "nhT4TzFE5b0NO3YMiMUlXexfqJrK23CAyyHuQyDEdP3"
 
 
 def line_notify_message(token, msg):

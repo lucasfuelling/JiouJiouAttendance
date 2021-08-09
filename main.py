@@ -10,7 +10,7 @@ import sys
 import os
 
 thread_running = True
-token = "hSoXRRGQiiKDkmvptJTk5rph7UIv50ZqB2vb4IJ0MgK"
+token = "nhT4TzFE5b0NO3YMiMUlXexfqJrK23CAyyHuQyDEdP3"
 
 
 def clear():
