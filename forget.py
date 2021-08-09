@@ -34,20 +34,22 @@ def connect_to_mariadb():
     return conn
 
 
-def no_come():
+def forget_clock_out():
     global token
     conn = connect_to_mariadb()
     cur = conn.cursor()
-    sql = "select name from users where name not in (select username from attendance where clockday = curdate()) and name <>''"
-    cur.execute(sql)
+    yesterday = datetime.now() - timedelta(days=1)
+    sql = "SELECT username FROM attendance WHERE clockout is NULL AND clockday =?"
+    par = (yesterday.strftime("%Y-%m-%d"),)
+    cur.execute(sql, par)
     rows = cur.fetchall()
     message = '\n'
     if rows:
         for row in rows:
             message = message + row[0] + '\n'
-        message = message + "--沒上班--"
+        message = message + "--昨天忘記打卡--"
         line_notify_message(token, message)
 
 
 if __name__ == '__main__':
-    no_come()
+    forget_clock_out()
