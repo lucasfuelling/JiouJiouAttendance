@@ -6,7 +6,6 @@ import csv
 from threading import *
 import requests
 import mariadb
-import sys
 import os
 
 thread_running = True
@@ -17,9 +16,9 @@ def clear():
     print("\033c")
 
 
-def line_notify_message(token, msg):
+def line_notify_message(line_token, msg):
     headers = {
-        "Authorization": "Bearer " + token,
+        "Authorization": "Bearer " + line_token,
         "Content-Type": "application/x-www-form-urlencoded"
     }
     payload = {'message': msg}
@@ -52,7 +51,8 @@ def user_exists(conn, mychip):
 def user_clocked(conn, mychip):
     cur = conn.cursor()
     todays_date = datetime.now().strftime("%Y-%m-%d")
-    sql = "SELECT userid FROM attendance INNER JOIN users USING(userid) WHERE clockout is NULL AND chipno=? AND clockday =?"
+    sql = "SELECT userid FROM attendance INNER JOIN users USING(userid) WHERE clockout is NULL AND chipno=? AND " \
+          "clockday =? "
     par = (mychip, todays_date)
     cur.execute(sql, par)
     if cur.fetchone():
