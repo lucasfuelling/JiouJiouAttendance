@@ -171,7 +171,8 @@ def background_thread():
             now = datetime.now()
             clear()
             print(now.strftime("%Y-%m-%d %H:%M"))
-            event.wait(timeout=60)
+            wait_time = 60 - datetime.now().second
+            event.wait(timeout=wait_time)
 
 
 if __name__ == '__main__':
