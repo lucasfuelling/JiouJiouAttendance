@@ -28,17 +28,13 @@ def line_notify_message(token, msg):
 
 
 def connect_to_mariadb():
-    try:
-        conn = mariadb.connect(
-            user="jiou99",
-            password="jiou99",
-            host="localhost",
-            port=3306,
-            database="attendance"
-        )
-    except mariadb.Error as e:
-        print(f"Error connecting to MariaDB Platform: {e}")
-        sys.exit(1)
+    conn = mariadb.connect(
+        user="jiou99",
+        password="jiou99",
+        host="localhost",
+        port=3306,
+        database="attendance"
+    )
     return conn
 
 
@@ -100,7 +96,7 @@ def attendance_come(conn, mychip):
             msg = name + " " + come_time + "上班"
             line_notify_message(token, msg)
     else:
-        print("已打卡了 ")
+        print("已打卡了")
 
 
 def attendance_go(conn, mychip):
@@ -140,23 +136,28 @@ def reader():
     while True:
         global thread_running
         mychip = input()
-        conn = connect_to_mariadb()
-        event.set()
-        clear()
-        if user_exists(conn, mychip) or mychip == "0002245328":
-            if mychip != "0002245328":
-                if user_clocked(conn, mychip):
-                    attendance_go(conn, mychip)
-                    export_data(conn)
+        try:
+            conn = connect_to_mariadb()
+            event.set()
+            clear()
+            if user_exists(conn, mychip) or mychip == "0002245328":
+                if mychip != "0002245328":
+                    if user_clocked(conn, mychip):
+                        attendance_go(conn, mychip)
+                        export_data(conn)
+                    else:
+                        attendance_come(conn, mychip)
                 else:
-                    attendance_come(conn, mychip)
+                    shutdown()
             else:
-                shutdown()
-                #add_user(conn)
-        else:
-            print("沒有找到用戶" + str(mychip))
-        time.sleep(1.8)
-        event.clear()
+                print("沒有找到用戶" + str(mychip))
+            time.sleep(1.8)
+            event.clear()
+        except mariadb.Error as e:
+            print(e)
+            event.set()
+            time.sleep(1.5)
+            event.clear()
 
 
 def shutdown():
