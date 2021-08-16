@@ -9,7 +9,8 @@ import mariadb
 import os
 
 thread_running = True
-token = "nhT4TzFE5b0NO3YMiMUlXexfqJrK23CAyyHuQyDEdP3"
+#token = "nhT4TzFE5b0NO3YMiMUlXexfqJrK23CAyyHuQyDEdP3"
+token = "n"
 max_overhours = 46
 
 def clear():
@@ -90,7 +91,8 @@ def attendance_come(conn, mychip):
         par = (userid,)
         cur.execute(sql, par)
         overhours, = cur.fetchone()
-
+        if overhours is None:
+            overhours = 0
         # clockin_A not on saturday if overhours > max_overhours
         if overhours > max_overhours and datetime.today().weekday() == 5:
             sql = "INSERT INTO attendance(userid, username, clockday, clockin_A, clockin_B)" \
