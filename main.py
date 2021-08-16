@@ -139,12 +139,12 @@ def attendance_go(conn, mychip):
         cur.execute(sql, par)
         conn.commit()
         print(name + " " + go_time + " " + "下班")
-        calc_overhours(cur, mychip)
+        calc_overhours(cur, conn, mychip)
     else:
         print("已打卡了")
 
 
-def calc_overhours(cur, mychip):
+def calc_overhours(cur, conn, mychip):
     sql = "SELECT userid, name FROM users WHERE chipno = ?"
     par = (mychip,)
     cur.execute(sql, par)
@@ -213,7 +213,6 @@ def reader():
                 if mychip != "0002245328":
                     if user_clocked(conn, mychip):
                         attendance_go(conn, mychip)
-                        calc_overhours(conn, mychip)
                         export_data(conn)
                     else:
                         attendance_come(conn, mychip)
