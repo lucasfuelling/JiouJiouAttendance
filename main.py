@@ -139,12 +139,12 @@ def attendance_go(conn, mychip):
         cur.execute(sql, par)
         conn.commit()
         print(name + " " + go_time + " " + "下班")
+        calc_overhours(cur, mychip)
     else:
         print("已打卡了")
 
 
-def calc_overhours(conn, mychip):
-    cur = conn.cursor()
+def calc_overhours(cur, mychip):
     sql = "SELECT userid, name FROM users WHERE chipno = ?"
     par = (mychip,)
     cur.execute(sql, par)
