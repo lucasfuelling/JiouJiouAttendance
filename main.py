@@ -9,8 +9,7 @@ import mariadb
 import os
 
 thread_running = True
-# token = "nhT4TzFE5b0NO3YMiMUlXexfqJrK23CAyyHuQyDEdP3"
-token = "n"
+token = "nhT4TzFE5b0NO3YMiMUlXexfqJrK23CAyyHuQyDEdP3"
 max_overhours = 46
 
 def clear():
