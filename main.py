@@ -86,10 +86,21 @@ def attendance_come(conn, mychip):
         sql = "SELECT userid, name FROM users WHERE chipno = ?"
         cur.execute(sql, par)
         userid, name = cur.fetchone()
+
+        sql = "select sum(overhours) from attendance where month(clockday) = month(curdate()) and userid = ?"
+        par = (userid,)
+        cur.execute(sql, par)
+        overhours, = cur.fetchone()
+
         # clockin_A not on saturday if overhours > max_overhours
-        sql = "INSERT INTO attendance(userid, username, clockday, clockin_A)" \
-              "VALUES (?,?,?,?)"
-        par = (userid, name, todays_date, come_time)
+        if overhours > max_overhours and datetime.today().weekday() == 5:
+            sql = "INSERT INTO attendance(userid, username, clockday, clockin_A, clockin_B)" \
+                  "VALUES (?,?,?,?,?)"
+            par = (userid, name, todays_date, None, come_time)
+        else:
+            sql = "INSERT INTO attendance(userid, username, clockday, clockin_A, clockin_B)" \
+                  "VALUES (?,?,?,?,?)"
+            par = (userid, name, todays_date, come_time, come_time)
         cur.execute(sql, par)
         conn.commit()
         print(name + " " + come_time + " " + "上班")
@@ -113,12 +124,15 @@ def attendance_go(conn, mychip):
         par = (mychip,)
         cur.execute(sql, par)
         userid, name = cur.fetchone()
-        overhours = get_overhours(cur,userid)
+        overhours = get_overhours(cur, userid)
 
-        #clockout_A = 17:00 if overhours are too much
         sql = "UPDATE attendance SET clockout_A = ?, clockout_B = ? WHERE userid = ? AND clockout_A is NULL AND clockday = ?"
+        # clockout_A = 17:00 if overhours are too much
         if overhours > max_overhours:
             par = (go_time_17, go_time, userid, todays_date)
+        # clockout_A = None on saturdays because no clockin
+        if overhours > max_overhours and datetime.today().weekday() == 5:
+            par = (None, go_time, userid, todays_date)
         else:
             par = (go_time, go_time, userid, todays_date)
         cur.execute(sql, par)
