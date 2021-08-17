@@ -39,7 +39,7 @@ def forget_clock_out():
     conn = connect_to_mariadb()
     cur = conn.cursor()
     yesterday = datetime.now() - timedelta(days=1)
-    sql = "SELECT username FROM attendance WHERE clockout is NULL AND clockday =?"
+    sql = "SELECT username FROM attendance WHERE clockout_B is NULL AND clockday =?"
     par = (yesterday.strftime("%Y-%m-%d"),)
     cur.execute(sql, par)
     rows = cur.fetchall()
