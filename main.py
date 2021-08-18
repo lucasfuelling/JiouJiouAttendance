@@ -10,6 +10,7 @@ import os
 
 thread_running = True
 token = "nhT4TzFE5b0NO3YMiMUlXexfqJrK23CAyyHuQyDEdP3"
+#token = "n"
 max_overhours = 46
 
 def clear():
@@ -31,6 +32,7 @@ def connect_to_mariadb():
         user="jiou99",
         password="jiou99",
         host="localhost",
+        #host="192.168.1.99",
         port=3306,
         database="attendance"
     )
@@ -157,17 +159,17 @@ def calc_overhours(cur, conn, mychip):
     dinner_time = timedelta(minutes=30)
     if clockin <= timedelta(hours=12) and clockout >= timedelta(hours=17, minutes=30):
         worked_time = clockout - clockin - lunch_time - dinner_time
-    if clockin >= timedelta(hours=13) and clockout >= timedelta(hours=17, minutes=30):
+    elif clockin >= timedelta(hours=13) and clockout >= timedelta(hours=17, minutes=30):
         worked_time = clockout - clockin - dinner_time
-    if clockin >= timedelta(hours=12) and clockout >= timedelta(hours=13) and clockout <= timedelta(hours=17, minutes=30):
+    elif clockin >= timedelta(hours=12) and clockout >= timedelta(hours=13) and clockout <= timedelta(hours=17, minutes=30):
         worked_time = clockout - clockin - lunch_time
     else:
         worked_time = clockout - clockin
 
     if worked_time >= timedelta(hours=8):
-        overhours = worked_time - timedelta(hours=8)
+        overhours = (worked_time.seconds - timedelta(hours=8).seconds)/3600
     else:
-        overhours = timedelta(hours=0)
+        overhours = 0
     sql = "UPDATE attendance SET overhours = ? WHERE userid = ? and clockday = curdate() and overhours is null"
     par = (overhours, userid)
     cur.execute(sql, par)
