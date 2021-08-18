@@ -168,7 +168,7 @@ def calc_overhours(cur, conn, mychip):
         worked_time = clockout - clockin
 
     if worked_time >= timedelta(hours=8):
-        overhours = (worked_time.seconds - timedelta(hours=8).seconds)/3600
+        overhours = (worked_time.seconds - timedelta(hours=8).seconds)//3600
     else:
         overhours = 0
     sql = "UPDATE attendance SET overhours = ? WHERE userid = ? and clockday = curdate() and overhours is null"
