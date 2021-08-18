@@ -10,8 +10,9 @@ import os
 
 thread_running = True
 token = "nhT4TzFE5b0NO3YMiMUlXexfqJrK23CAyyHuQyDEdP3"
-#token = "n"
+# token = "n"
 max_overhours = 46
+
 
 def clear():
     print("\033c")
@@ -32,7 +33,7 @@ def connect_to_mariadb():
         user="jiou99",
         password="jiou99",
         host="localhost",
-        #host="192.168.1.99",
+        # host="192.168.1.99",
         port=3306,
         database="attendance"
     )
@@ -133,7 +134,7 @@ def attendance_go(conn, mychip):
         if overhours > max_overhours:
             par = (go_time_17, go_time, userid, todays_date)
         # clockout_A = None on saturdays because no clockin
-        if overhours > max_overhours and datetime.today().weekday() == 5:
+        elif overhours > max_overhours and datetime.today().weekday() == 5:
             par = (None, go_time, userid, todays_date)
         else:
             par = (go_time, go_time, userid, todays_date)
