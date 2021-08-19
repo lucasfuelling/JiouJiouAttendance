@@ -156,19 +156,21 @@ def calc_overhours(cur, conn, mychip):
     par = (userid,)
     cur.execute(sql, par)
     clockin, clockout = cur.fetchone()
+    if clockin <= timedelta(hours=8):
+        clockin = timedelta(hours=8)
     lunch_time = timedelta(hours=1)
     dinner_time = timedelta(minutes=30)
     if clockin <= timedelta(hours=12) and clockout >= timedelta(hours=17, minutes=30):
         worked_time = clockout - clockin - lunch_time - dinner_time
     elif clockin >= timedelta(hours=13) and clockout >= timedelta(hours=17, minutes=30):
         worked_time = clockout - clockin - dinner_time
-    elif clockin >= timedelta(hours=12) and clockout >= timedelta(hours=13) and clockout <= timedelta(hours=17, minutes=30):
+    elif clockin <= timedelta(hours=12) and clockout >= timedelta(hours=13) and clockout <= timedelta(hours=17, minutes=30):
         worked_time = clockout - clockin - lunch_time
     else:
         worked_time = clockout - clockin
 
-    if worked_time >= timedelta(hours=8):
-        overhours = (worked_time.seconds - timedelta(hours=8).seconds)//3600
+    if worked_time > timedelta(hours=8):
+        overhours = (worked_time.seconds - timedelta(hours=8).seconds)/3600
     else:
         overhours = 0
     sql = "UPDATE attendance SET overhours = ? WHERE userid = ? and clockday = curdate() and overhours is null"
