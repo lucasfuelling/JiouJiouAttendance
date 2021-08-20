@@ -142,6 +142,9 @@ def attendance_go(conn, mychip):
         conn.commit()
         print(name + " " + go_time + " " + "下班")
         calc_overhours(cur, conn, mychip)
+        if datetime.now().replace(hour=17, minute=0) > datetime.now():
+            msg = name + " " + go_time + "下班"
+            line_notify_message(token, msg)
     else:
         print("已打卡了")
 
