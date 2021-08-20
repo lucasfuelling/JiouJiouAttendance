@@ -152,7 +152,7 @@ def calc_overhours(cur, conn, mychip):
     cur.execute(sql, par)
     userid, name = cur.fetchone()
 
-    sql = "select clockin_B, clockout_B from attendance where userid = ? and clockday = curdate()"
+    sql = "select clockin_B, clockout_B from attendance where userid = ? and clockday = curdate() order by clockout_B DESC"
     par = (userid,)
     cur.execute(sql, par)
     clockin, clockout = cur.fetchone()
